@@ -15,10 +15,15 @@ class ControladorFormularios{
 				preg_match('/^[0-9a-zA-Z]+$/', $_POST["registroPassword"])
 			){
 			$tabla = "registros";
+				$token = md5($_POST["registroNombre"]."+".$_POST["registroEmail"]);
 
-			$datos = array("nombre" => $_POST["registroNombre"],
+			$datos = array(
+						"token" => $token,
+				"nombre" => $_POST["registroNombre"],
 				           "email" => $_POST["registroEmail"],
 				           "password" => $_POST["registroPassword"]);
+
+				
 
 			$respuesta = ModeloFormularios::mdlRegistro($tabla, $datos);
 
@@ -26,7 +31,7 @@ class ControladorFormularios{
 			}else {
 				$respuesta = "error";
 
-				return $respuesta;
+				return $respuesta;  
 
 			}
 
