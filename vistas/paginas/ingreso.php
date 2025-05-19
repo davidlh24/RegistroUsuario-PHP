@@ -7,7 +7,7 @@
 			<label for="email">Correo electrónico:</label>
 
 			<div class="input-group">
-				
+
 				<div class="input-group-prepend">
 					<span class="input-group-text">
 						<i class="fas fa-envelope"></i>
@@ -15,16 +15,16 @@
 				</div>
 
 				<input type="email" class="form-control" id="email" name="ingresoEmail">
-			
+
 			</div>
-			
+
 		</div>
 
 		<div class="form-group">
 			<label for="pwd">Contraseña:</label>
 
 			<div class="input-group">
-				
+
 				<div class="input-group-prepend">
 					<span class="input-group-text">
 						<i class="fas fa-lock"></i>
@@ -37,15 +37,17 @@
 
 		</div>
 
-		<?php 
 
-		$ingreso = new ControladorFormularios();
-		$ingreso -> ctrIngreso();
-
-		?>
-		
 		<button type="submit" class="btn btn-primary">Ingresar</button>
 
 	</form>
 
+
+</div>
+<div>
+	<?php
+	$ingreso = new ControladorFormularios();
+	$ingreso->ctrIngreso();
+
+	?>
 </div>

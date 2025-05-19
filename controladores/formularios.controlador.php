@@ -1,173 +1,177 @@
 <?php
 
-class ControladorFormularios{
+class ControladorFormularios
+{
 
-	/*=============================================
+    /*=============================================
 	Registro
 	=============================================*/
 
-	static public function ctrRegistro(){
+    static public function ctrRegistro()
+    {
 
-		if(isset($_POST["registroNombre"])){
-			if (
-				preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["registroNombre"]) &&
-				preg_match('/^[^0-9][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/', $_POST["registroEmail"]) &&
-				preg_match('/^[0-9a-zA-Z]+$/', $_POST["registroPassword"])
-			){
-			$tabla = "registros";
-				$token = md5($_POST["registroNombre"]."+".$_POST["registroEmail"]);
+        if (isset($_POST["registroNombre"])) {
+            if (
+                preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["registroNombre"]) &&
+                preg_match('/^[^0-9][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/', $_POST["registroEmail"]) &&
+                preg_match('/^[0-9a-zA-Z]+$/', $_POST["registroPassword"])
+            ) {
+                $tabla = "registros";
+                $token = md5($_POST["registroNombre"] . "+" . $_POST["registroEmail"]);
 
-			$datos = array(
-						"token" => $token,
-				"nombre" => $_POST["registroNombre"],
-				           "email" => $_POST["registroEmail"],
-				           "password" => $_POST["registroPassword"]);
+                $datos = array(
+                    "token" => $token,
+                    "nombre" => $_POST["registroNombre"],
+                    "email" => $_POST["registroEmail"],
+                    "password" => $_POST["registroPassword"]
+                );
 
-				
 
-			$respuesta = ModeloFormularios::mdlRegistro($tabla, $datos);
 
-			return $respuesta;
-			}else {
-				$respuesta = "error";
+                $respuesta = ModeloFormularios::mdlRegistro($tabla, $datos);
 
-				return $respuesta;  
+                return $respuesta;
+            } else {
+                $respuesta = "error";
 
-			}
+                return $respuesta;
+            }
+        }
+    }
 
-		}
-
-	}
-
-	/*=============================================
+    /*=============================================
 	Seleccionar Registros
 	=============================================*/
 
-	static public function ctrSeleccionarRegistros($item, $valor){
+    static public function ctrSeleccionarRegistros($item, $valor)
+    {
 
-		$tabla = "registros";
+        $tabla = "registros";
 
-		$respuesta = ModeloFormularios::mdlSeleccionarRegistros($tabla, $item, $valor);
+        $respuesta = ModeloFormularios::mdlSeleccionarRegistros($tabla, $item, $valor);
 
-		return $respuesta;
+        return $respuesta;
+    }
 
-	}
-
-	/*=============================================
+    /*=============================================
 	Ingreso
 	=============================================*/
 
-	public function ctrIngreso(){
+    public function ctrIngreso()
+    {
+        if (isset($_POST["ingresoEmail"])) {
 
-		if(isset($_POST["ingresoEmail"])){
+            $tabla = "registros";
+            $item = "email";
+            $valor = $_POST["ingresoEmail"];
 
-			$tabla = "registros";
-			$item = "email";
-			$valor = $_POST["ingresoEmail"];
+            $respuesta = ModeloFormularios::mdlSeleccionarRegistros($tabla, $item, $valor);
 
-			$respuesta = ModeloFormularios::mdlSeleccionarRegistros($tabla, $item, $valor);
+            if ($respuesta && $respuesta["email"] == $_POST["ingresoEmail"] && $respuesta["password"] == $_POST["ingresoPassword"]) {
 
-			if($respuesta["email"] == $_POST["ingresoEmail"] && $respuesta["password"] == $_POST["ingresoPassword"]){
+                $_SESSION["validarIngreso"] = "ok";
 
-				$_SESSION["validarIngreso"] = "ok";
+                echo '<script>
+                if ( window.history.replaceState ) {
+                    window.history.replaceState( null, null, window.location.href );
+                }
+                window.location = "index.php?pagina=inicio";
+            </script>';
+            } else {
 
-				echo '<script>
+                echo '<script>
+                if ( window.history.replaceState ) {
+                    window.history.replaceState( null, null, window.location.href );
+                }
+            </script>';
 
-					if ( window.history.replaceState ) {
+                echo '<div class="alert alert-danger">Error al ingresar al sistema, el email o la contraseña no coinciden</div>';
+            }
+        }
+    }
 
-						window.history.replaceState( null, null, window.location.href );
+    /*=============================================
+Actualizar Registro
+=============================================*/
+    static public function ctrActualizarRegistro()
+    {
+        if (isset($_POST["actualizarNombre"])) {
+            // Validación de datos ingresados
+            if (
+                preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9 ]+$/', $_POST["actualizarNombre"]) &&
+                preg_match('/^[^0-9][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/', $_POST["actualizarEmail"])
+            ) {
+                // Obtener el usuario por token
+                $usuario = ModeloFormularios::mdlSeleccionarRegistros("registros", "token", $_POST["tokenUsuario"]);
 
-					}
+                // Verificar si el token coincide
+                if ($usuario && $usuario["token"] == $_POST["tokenUsuario"]) {
+                    // Verificar si la contraseña debe actualizarse
+                    if (!empty($_POST["actualizarPassword"]) && preg_match('/^[0-9a-zA-Z]+$/', $_POST["actualizarPassword"])) {
+                        $password = $_POST["actualizarPassword"];
+                    } else {
+                        $password = $usuario["password"]; // Mantener la contraseña actual
+                    }
 
-					window.location = "index.php?pagina=inicio";
+                    $tabla = "registros";
+                    $datos = array(
+                        "token" => $_POST["tokenUsuario"],
+                        "nombre" => $_POST["actualizarNombre"],
+                        "email" => $_POST["actualizarEmail"],
+                        "password" => $password
+                    );
 
-				</script>';
+                    // Actualizar registro en la base de datos
+                    $respuesta = ModeloFormularios::mdlActualizarRegistro($tabla, $datos);
 
-			}else{
+                    // Verificar el resultado de la actualización
+                    if ($respuesta == "ok") {
+                        echo '<script>
+                        alert("Usuario actualizado correctamente");
+                        window.location = "index.php?pagina=inicio";
+                    </script>';
+                    } else {
+                        echo '<div class="alert alert-danger">Error al actualizar el usuario</div>';
+                    }
+                } else {
+                    echo '<div class="alert alert-danger">Token no válido o usuario no encontrado</div>';
+                }
+            } else {
+                echo '<div class="alert alert-danger">Error en la validación de los datos</div>';
+            }
+        }
+    }
 
+    /*=============================================
+Eliminar Registro
+=============================================*/
+    public function ctrEliminarRegistro()
+    {
+        if (isset($_POST["eliminarRegistro"])) {
+            $tabla = "registros";
+            $valor = $_POST["eliminarRegistro"];
 
-				echo '<script>
+            // Obtener el usuario usando el token proporcionado
+            $usuario = ModeloFormularios::mdlSeleccionarRegistros($tabla, "token", $valor);
 
-					if ( window.history.replaceState ) {
+            // Verificar si el usuario existe y el token coincide
+            if ($usuario && $usuario["token"] == $valor) {
+                $respuesta = ModeloFormularios::mdlEliminarRegistro($tabla, $valor);
 
-						window.history.replaceState( null, null, window.location.href );
-
-					}
-
-				</script>';
-
-				echo '<div class="alert alert-danger">Error al ingresar al sistema, el email o la contraseña no coinciden</div>';
-			}
-			
-			
-
-		}
-
-	}
-
-	/*=============================================
-	Actualizar Registro
-	=============================================*/
-	static public function ctrActualizarRegistro(){
-
-		if(isset($_POST["actualizarNombre"])){
-
-			if($_POST["actualizarPassword"] != ""){			
-
-				$password = $_POST["actualizarPassword"];
-
-			}else{
-
-				$password = $_POST["passwordActual"];
-			}
-
-			$tabla = "registros";
-
-			$datos = array("id" => $_POST["idUsuario"],
-							"nombre" => $_POST["actualizarNombre"],
-				           "email" => $_POST["actualizarEmail"],
-				           "password" => $password);
-
-			$respuesta = ModeloFormularios::mdlActualizarRegistro($tabla, $datos);
-
-			return $respuesta;
-
-		}
-
-
-	}
-
-	/*=============================================
-	Eliminar Registro
-	=============================================*/
-	public function ctrEliminarRegistro(){
-
-		if(isset($_POST["eliminarRegistro"])){
-
-			$tabla = "registros";
-			$valor = $_POST["eliminarRegistro"];
-
-			$respuesta = ModeloFormularios::mdlEliminarRegistro($tabla, $valor);
-
-			if($respuesta == "ok"){
-
-				echo '<script>
-
-					if ( window.history.replaceState ) {
-
-						window.history.replaceState( null, null, window.location.href );
-
-					}
-
-					window.location = "index.php?pagina=inicio";
-
-				</script>';
-
-			}
-
-		}
-
-	}
-
-
+                if ($respuesta == "ok") {
+                    echo '<script>
+                    if (window.history.replaceState) {
+                        window.history.replaceState(null, null, window.location.href);
+                    }
+                    alert("Usuario eliminado exitosamente");
+                    window.location = "index.php?pagina=inicio";
+                </script>';
+                } else {
+                    echo '<div class="alert alert-danger">Error al eliminar el usuario</div>';
+                }
+            } else {
+                echo '<div class="alert alert-danger">Token no válido o usuario no encontrado</div>';
+            }
+        }
+    }
 }
