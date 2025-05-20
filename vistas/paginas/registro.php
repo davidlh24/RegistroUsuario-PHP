@@ -80,9 +80,14 @@
 
 				}
 
-			</script>';
-
+				
+				</script>';
 		echo '<div class="alert alert-success">El usuario ha sido registrado</div>';
+		echo '<script> 
+		setTimeout(() =>{
+		 window.location = "ingreso";
+	},1000);
+		 </script>';
 	}
 	if ($registro == "error") {
 
