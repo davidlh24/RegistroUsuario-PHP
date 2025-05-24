@@ -54,26 +54,21 @@ function validarSesion()
 	LOGOTIPO
 	======================================-->
 
-	<div class="container-fluid">
-
-		<h3 class="text-center py-3">LOGO</h3>
-
-	</div>
-
+	
 	<!--=====================================
 	BOTONERA
 	======================================-->
-
+	
 	<div class="container-fluid  bg-light">
-
+		
 		<div class="container">
-
+			
 			<ul class="nav nav-justified py-2 nav-pills">
-
+				
 				<?php if (isset($_GET["pagina"])): ?>
-
+					
 					<?php if ($_GET["pagina"] == "registro"): ?>
-
+						
 						<li class="nav-item">
 							<a class="nav-link active" href="registro">Registro</a>
 						</li>
@@ -84,7 +79,7 @@ function validarSesion()
 							<a class="nav-link" href="registro">Registro</a>
 						</li>
 
-					<?php endif ?>
+						<?php endif ?>
 
 					<?php if ($_GET["pagina"] == "ingreso"): ?>
 
@@ -150,15 +145,18 @@ function validarSesion()
 					<li class="nav-item">
 						<a class="nav-link" href="salir">Salir</a>
 					</li>
-
-				<?php endif ?>
-
-			</ul>
-
+					
+					<?php endif ?>
+					
+				</ul>
+				
+			</div>
+			
 		</div>
-
-	</div>
-
+		
+		<div class="container-fluid text-center py-3">
+			<img src="mundo.png" class="img-fluid " >
+		</div>
 	<!--=====================================
 	CONTENIDO
 	======================================-->
