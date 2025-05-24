@@ -32,6 +32,7 @@ Todo ello estructurado bajo el patrón MVC, con controladores, modelos y vistas 
    - **Update:** modifica nombre, email o contraseña.  
    - **Delete:** elimina el usuario de la base de datos.  
 
+
 ## 📂 Estructura de Archivos
 ```
 RegistroUsuario-PHP/
@@ -46,46 +47,5 @@ RegistroUsuario-PHP/
 
 ## 🌐 Vista Previa
 
-Una vez registrado e identificado, verás un panel donde podrás actualizar tus datos o eliminar tu cuenta. La estructura MVC mantiene el código organizado y fácil de ampliar.
-
-## ⚙️ Instalación
-
-1. Clona este repositorio:
-   ```bash
-   git clone https://github.com/davidlh24/RegistroUsuario-PHP.git
-   cd RegistroUsuario-PHP
-Importa la base de datos a MySQL:
-
-sql
-Copiar
-Editar
-mysql -u TU_USUARIO -p TU_BASE_DE_DATOS < dbregistro.sql
-Configura la conexión en modelos/conexion.php con tus credenciales MySQL.
-
-Coloca todo en tu servidor local (XAMPP, WAMP, Laragon…) o en tu hosting.
-
-Accede desde el navegador a:
-
-bash
-Copiar
-Editar
-http://localhost/RegistroUsuario-PHP/index.php
-o, si ya está desplegado,
-
-arduino
-Copiar
-Editar
 https://rc-php.digiservicedlh.com/
-✏️ Cómo Usar
-Registrarse: Rellena el formulario de registro y envía.
 
-Iniciar Sesión: Introduce tu email y contraseña.
-
-Actualizar Perfil: Dentro del panel, edita tus datos y guarda.
-
-Eliminar Cuenta: Pulsa “Borrar cuenta” para eliminar tu usuario.
-
-Cerrar Sesión: Usa el enlace “Logout” para salir seguro.
-
-¡Gracias por utilizar este sistema de registro en PHP!
-Si tienes dudas o sugerencias, no dudes en contactarme. 😊
