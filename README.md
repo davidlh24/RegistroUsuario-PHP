@@ -33,7 +33,7 @@ Todo ello estructurado bajo el patrón MVC, con controladores, modelos y vistas 
    - **Delete:** elimina el usuario de la base de datos.  
 
 ## 📂 Estructura de Archivos
-
+```
 RegistroUsuario-PHP/
 ├── controladores/ # Lógica que recibe peticiones y llama a modelos
 ├── modelos/ # Clases y funciones para interacción con DB
@@ -42,10 +42,7 @@ RegistroUsuario-PHP/
 ├── dbregistro.sql # Script de creación e inserción inicial de la BD
 ├── index.php # Punto de entrada y router sencillo
 └── mundo.png # Imagen del logo o captura de pantalla
-
-bash
-Copiar
-Editar
+```
 
 ## 🌐 Vista Previa
 
